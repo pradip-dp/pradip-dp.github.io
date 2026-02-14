@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pradip Prajapati - Formal Verification Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-mid: #999999;
+            --accent: #1a1a1a;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --black: #ffffff;
+            --white: #0a0a0a;
+            --gray-light: #1a1a1a;
+            --gray-mid: #888888;
+            --accent: #ffffff;
+            --border: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            font-weight: 300;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 5%;
+            z-index: 1000;
+            background: var(--white);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--black);
+            transition: fill 0.3s ease;
+        }
+
+        .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            display: none;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 8% 2rem 5%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        [data-theme="dark"] nav {
+            background: rgba(10, 10, 10, 0.98);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            padding-right: 60px;
+        }
+
+        nav a {
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: opacity 0.3s ease;
+        }
+
+        nav a:hover {
+            opacity: 0.5;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 10rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            text-align: left;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .cta-link {
+            display: inline-block;
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--black);
+            padding-bottom: 0.25rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-link:hover {
+            opacity: 0.5;
+        }
+
+        /* Section Headers */
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 400;
+            margin-bottom: 4rem;
+            letter-spacing: 0.02em;
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        /* About Section */
+        .about-text {
+            font-size: 1.1rem;
+            color: var(--black);
+            line-height: 1.8;
+            max-width: 700px;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 500;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            color: var(--gray-mid);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Projects/Publications Grid */
+        .item-list {
+            border-top: 1px solid var(--border);
+        }
+
+        .item {
+            border-bottom: 1px solid var(--border);
+            padding: 3rem 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .item:hover {
+            opacity: 0.7;
+        }
+
+        .item-meta {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-mid);
+            margin-bottom: 0.5rem;
+        }
+
+        .item h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .item p {
+            color: var(--gray-mid);
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+
+        .item strong {
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-mid);
+        }
+
+        /* Timeline */
+        .timeline {
+            border-left: 1px solid var(--border);
+            padding-left: 3rem;
+            margin-left: 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.4rem;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: var(--black);
+            border-radius: 50%;
+        }
+
+        .timeline-item .role {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            font-weight: 400;
+        }
+
+        .timeline-item .date {
+            color: var(--gray-mid);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-item p {
+            color: var(--gray-mid);
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            max-width: 600px;
+        }
+
+        .contact-text {
+            font-size: 1.1rem;
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-link {
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 0.25rem;
+            transition: border-color 0.3s ease;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .contact-link:hover {
+            border-bottom-color: var(--black);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-mid);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 1.5rem;
+                right: 5%;
+                width: 40px;
+                height: 40px;
+            }
+
+            .theme-toggle svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            nav {
+                padding: 1.5rem 5%;
+            }
+
+            nav ul {
+                gap: 1rem;
+                padding-right: 0;
+                font-size: 0.75rem;
+            }
+
+            section {
+                padding: 8rem 5%;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .timeline-item::before {
+                left: -2.4rem;
+            }
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+    </button>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <div class="hero-content">
+            <h1 class="fade-in">Pradip Prajapati</h1>
+            <p class="subtitle fade-in">Formal Verification Engineer specializing in GenAI-driven verification methodologies</p>
+            <a href="#contact" class="cta-link fade-in">Get in touch</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2>About</h2>
+            <div class="about-text">
+                <p>I'm a Formal Verification Engineer with over two years of experience specializing in building formal environments for cutting-edge IP blocks. My expertise lies in formal property verification, with a track record of identifying 60+ critical corner case bugs in production designs.</p>
+                <p>Currently at Synopsys Inc's Formal Verification Centre of Excellence, I previously led a team of five engineers at Intel, driving verification sign-offs for datacenter products. I'm pioneering the integration of GenAI methodologies into formal verification, reducing verification cycles and enhancing test coverage by up to 80%.</p>
+                <p>As a Cargill Global Scholar (top 10 in India) and recipient of the Best Paper Award at DVCon India 2024, I'm passionate about pushing the boundaries of formal verification and bringing innovative AI-driven solutions to hardware verification challenges.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Verification</h3>
+                    <ul>
+                        <li>Formal Property Verification</li>
+                        <li>Functional Verification</li>
+                        <li>System Verilog Assertions</li>
+                        <li>JasperGold / VCFormal</li>
+                        <li>Post-Si Bug Hunting</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Programming</h3>
+                    <ul>
+                        <li>Python (PyTorch, NumPy)</li>
+                        <li>SystemVerilog</li>
+                        <li>C/C++</li>
+                        <li>Shell (Bash/Zsh)</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>AI & ML</h3>
+                    <ul>
+                        <li>GenAI for Verification</li>
+                        <li>Deep Learning (PyTorch)</li>
+                        <li>Computer Vision</li>
+                        <li>Graph Neural Networks</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools</h3>
+                    <ul>
+                        <li>Verdi Debugging</li>
+                        <li>State Space Tunnelling</li>
+                        <li>Git / Linux</li>
+                        <li>Team Leadership</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="publications">
+        <div class="container">
+            <h2>Publications</h2>
+            <div class="item-list">
+                <div class="item">
+                    <div class="item-meta">Best Paper Award · DVCon India 2024</div>
+                    <h3>GenAI Leap in Formal Verification Testplanning</h3>
+                    <p><strong>Authors:</strong> Anshul Jain, Karan Rawat, Pradip Prajapati</p>
+                    <p>First-of-its-kind research integrating Generative AI into formal verification testplanning. Developed a novel framework using chain-of-thought prompt engineering to build exhaustive formal verification testplans, achieving 80-90% bug coverage across different design classes.</p>
+                    <p><strong>Impact:</strong> 80% reduction in verification ramp-up time</p>
+                </div>
+                <div class="item">
+                    <div class="item-meta">Engineering IP Track · DAC 2024</div>
+                    <h3>Watt's Up with DDR5: Formal Verification Framework for Robust DRAM Power Management</h3>
+                    <p>Published comprehensive DRAM power management verification framework at Design Automation Conference, San Francisco. Framework ensures shift-left verification and power consumption reduction through exhaustive formal proofs.</p>
+                    <p><strong>Achievement:</strong> Identified 45+ bugs and power enhancement opportunities in cutting-edge server designs</p>
+                </div>
+                <div class="item">
+                    <div class="item-meta">Research Paper · DVCon India 2025 & VLSID 2026</div>
+                    <h3>RAG for Formal-Aware Property Generation</h3>
+                    <p>Extended research on applying Retrieval-Augmented Generation techniques to formal verification. Building on GenAI testplanning work to create formal-aware property generation systems leveraging domain-specific knowledge bases.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2>Selected Projects</h2>
+            <div class="item-list">
+                <div class="item">
+                    <h3>Formal Verification Framework for DDR5</h3>
+                    <p>Developed comprehensive formal verification environments for DDR5 power management in datacenter products. Framework found 45+ bugs and enabled significant power optimizations.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">JasperGold</span>
+                        <span class="tech-tag">SVA</span>
+                        <span class="tech-tag">Power Management</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <h3>GenAI-Driven Testplan Generation</h3>
+                    <p>Pioneered use of large language models for automated formal verification testplan generation. Achieved 80% reduction in testplanning effort while maintaining 80-90% accuracy.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">GenAI</span>
+                        <span class="tech-tag">Prompt Engineering</span>
+                        <span class="tech-tag">Python</span>
+                    </div>
+                </div>
+                <div class="item">
+                    <h3>Image Restoration with Diffusion Models</h3>
+                    <p>Created deep neural network architecture for inpainting and image restoration. Integrated diffusion models with internal learning to eliminate need for pre-training.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Computer Vision</span>
+                        <span class="tech-tag">Deep Learning</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <div class="container">
+            <h2>Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Synopsys Inc</h3>
+                    <div class="role">Senior R&D Engineer (Formal Verification)</div>
+                    <div class="date">Feb 2025 - Present</div>
+                    <p>Working at the Formal Verification Centre of Excellence, contributing to cutting-edge formal verification technologies and methodologies for industry-leading chip designs.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Intel Corporation</h3>
+                    <div class="role">Senior Formal Verification Engineer</div>
+                    <div class="date">Jun 2022 - Feb 2025</div>
+                    <p>Led team of 5 engineers to successful sign-offs on 4 IP blocks. Integrated GenAI methodologies reducing verification time by 80%. Winner of year-end bug hunting challenge. Identified 60+ critical bugs in production designs.</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Redpine Signals</h3>
+                    <div class="role">Design & Verification Intern</div>
+                    <div class="date">May 2021 - Jul 2021</div>
+                    <p>Designed hardware accelerator concept for Graph Neural Networks inference. Received full-time offer for creating flexible design hierarchy with reduced hardware requirements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog">
+        <div class="container">
+            <h2>Blog</h2>
+            <div class="item-list">
+                <div class="item">
+                    <div class="item-meta">September 2024</div>
+                    <h3>Winning Best Paper at DVCon India</h3>
+                    <p>Sharing insights from our groundbreaking GenAI-driven formal verification testplanning methodology that won Best Paper at DVCon India 2024. The journey from research idea to recognition, and what it means for the future of hardware verification.</p>
+                    <a href="blog/dvcon-best-paper.html" class="cta-link">Read more</a>
+                </div>
+                <div class="item">
+                    <div class="item-meta">June 2024</div>
+                    <h3>DDR5 Power Management at DAC 2024</h3>
+                    <p>Presenting our formal verification framework for robust DRAM power management at Design Automation Conference in San Francisco. Key learnings from identifying 45+ bugs in production designs.</p>
+                    <a href="blog/dac-ddr5.html" class="cta-link">Read more</a>
+                </div>
+                <div class="item">
+                    <div class="item-meta">December 2023</div>
+                    <h3>Winning Intel's Bug Hunting Challenge</h3>
+                    <p>Reflections on winning the year-end live project bug hunting challenge and discovering critical corner cases in production designs. Strategies and methodologies that led to success.</p>
+                    <a href="blog/intel-bug-hunting.html" class="cta-link">Read more</a>
+                </div>
+                <div class="item">
+                    <div class="item-meta">August 2023</div>
+                    <h3>The Future of Formal Verification with GenAI</h3>
+                    <p>Exploring emerging trends in applying generative AI to formal verification workflows. How prompt engineering and large language models are transforming the verification landscape.</p>
+                    <a href="blog/future-genai-fv.html" class="cta-link">Read more</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Contact</h2>
+            <div class="contact-content">
+                <p class="contact-text">I'm always interested in discussing formal verification, hardware design challenges, and new opportunities in the semiconductor industry.</p>
+                <div class="contact-links">
+                    <a href="mailto:pradip.prajapati.official@gmail.com" class="contact-link">pradip.prajapati.official@gmail.com</a>
+                    <a href="https://linkedin.com/in/pradip-prajapati" target="_blank" class="contact-link">LinkedIn</a>
+                    <a href="https://github.com/pradipprajapati" target="_blank" class="contact-link">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Pradip Prajapati</p>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Active nav state
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.opacity = '';
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.style.opacity = '0.5';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
