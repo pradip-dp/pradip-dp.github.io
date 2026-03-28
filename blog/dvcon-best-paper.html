@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winning Best Paper at DVCon India - Pradip Prajapati</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-mid: #999999;
+            --accent: #1a1a1a;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --black: #ffffff;
+            --white: #0a0a0a;
+            --gray-light: #1a1a1a;
+            --gray-mid: #888888;
+            --accent: #ffffff;
+            --border: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            font-weight: 300;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 5%;
+            z-index: 1000;
+            background: var(--white);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--black);
+            transition: fill 0.3s ease;
+        }
+
+        .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            display: none;
+        }
+
+        header {
+            padding: 3rem 5%;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.5;
+        }
+
+        article {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 5rem 5%;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-mid);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--gray-mid);
+        }
+
+        strong {
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            color: var(--gray-mid);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--border);
+            padding-left: 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--gray-mid);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 3rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-mid);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 5rem;
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 1.5rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            article {
+                padding: 3rem 5%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+            <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </button>
+
+    <header>
+        <a href="../index.html#blog" class="back-link">&larr; Back to portfolio</a>
+    </header>
+
+    <article>
+        <div class="article-meta">September 2024 · 8 min read</div>
+
+        <h1>Winning Best Paper at DVCon India: A Journey Through GenAI-Driven Formal Verification</h1>
+
+        <p class="lead">DVCon India 2024 gave us the chance to present "GenAI Leap in Formal Verification Testplanning" - a paper on turning dense specifications into structured formal verification testplans with prompt engineering and measurable coverage results.</p>
+
+        <p>This work came out of a very practical pain point. Formal property verification is one of the most rigorous ways to validate hardware, but the work before the first assertion often takes too long. Engineers have to read large specification documents, identify core behaviors, translate them into checkers, and make sure nothing important is missed. That planning phase is knowledge-heavy, slow, and easy to under-estimate.</p>
+
+        <p>Our paper asked a simple question: can generative AI reduce the effort required to create a formal verification testplan without turning the result into vague automation theater? The answer, at least from our experiments, was yes - if the model is guided with the right prompt structure and evaluated with objective formal metrics.</p>
+
+        <h2>Why We Focused on Testplanning First</h2>
+
+        <p>There has already been interesting work around generating assertions directly from natural-language specifications, but direct spec-to-assertion translation is a hard problem. It asks the model to understand architecture, reason about implementation intent, and emit precise formal properties in one step.</p>
+
+        <p>We found it more effective to decompose that workflow. Instead of jumping straight to SVA generation, we focused first on <strong>spec-to-testplan</strong>. That turns the job into a structured information extraction task: read the spec, identify the design functions, enumerate the required checkers, and organize the result into something a verification engineer can implement.</p>
+
+        <blockquote>
+            The paper showed 80%+ accurate and exhaustive testplans across three designs of very different complexity, with the strongest cases pushing well above 90% on formal coverage metrics.
+        </blockquote>
+
+        <h2>The Prompt Sequence That Actually Worked</h2>
+
+        <p>The most useful insight from the project was that raw prompting was not enough. Generic prompts produced generic plans, and some of them drifted toward simulation-style thinking instead of formal verification. The winning approach was a prompt sequence that forced the model into the right role, the right structure, and the right verification lens.</p>
+
+        <ol>
+            <li>Start with a formal verification engineer persona and make the task explicit.</li>
+            <li>Ask the model to summarize the design in terms of core functionality and flow of operation.</li>
+            <li>Request an exhaustive list of checkers that can be implemented using only design inputs and outputs.</li>
+            <li>Force the output into a structured table with checker IDs, names, and implementation-oriented descriptions.</li>
+            <li>Ask a follow-up pass to catch missed or repeated checkers, then generate a staged implementation plan.</li>
+        </ol>
+
+        <p>That last refinement step mattered more than I expected. Explicitly asking the model to check for omissions and duplication improved completeness and made the output much more usable in practice.</p>
+
+        <h2>How We Evaluated the Output</h2>
+
+        <p>Testplanning is a factual task, so we did not want to judge the result by whether it merely sounded convincing. We used <strong>formal coverage</strong> as the evaluation metric. The main lens in the paper was observability coverage, broken down into mutation, formal core, and COI coverage.</p>
+
+        <p>That gave us an objective feedback loop. If a generated testplan led to better coverage once implemented, the prompt was working. If coverage stalled, or if the plan contained redundant or low-value checkers, we refined the prompt and tried again. This became the center of our spec-to-testplan prompt refinement framework.</p>
+
+        <h2>Three Case Studies, Three Different Complexity Levels</h2>
+
+        <h3>1. Write Transaction Packer</h3>
+        <p>This was our smallest case study: a 659-flop design with 26,954 gates and 13 ports. The GenAI-generated plan identified seven practical checkers, including data packing, flush completeness, misaligned write handling, and downstream backpressure behavior. Once implemented, the resulting testplan reached <strong>99.74% mutation</strong>, <strong>98.32% formal core</strong>, and <strong>90.27% COI</strong> coverage.</p>
+
+        <h3>2. ID Queue Manager</h3>
+        <p>The second design scaled up sharply to 18,816 flops and 430,975 gates. Here the model had to reason about FIFO ordering, push/pop behavior, full-bandwidth versus half-bandwidth operation, and masked search behavior. The generated plan captured eleven meaningful checkers and reached <strong>93.05% mutation</strong>, <strong>93.05% formal core</strong>, and <strong>80.75% COI</strong> coverage.</p>
+
+        <h3>3. AXI4-Lite Crossbar</h3>
+        <p>The most complex case study was the fully connected AXI4-Lite crossbar, a 44,096-flop design with more than 4.9 million gates. The model generated seventeen verification targets covering valid routing, decode errors, default-master behavior, response routing, transaction completion, address accessibility, and throughput consistency. That plan reached <strong>93.84% mutation</strong>, <strong>85.57% formal core</strong>, and <strong>80.93% COI</strong> coverage.</p>
+
+        <p>Seeing those results hold across three very different designs was the moment the work stopped feeling like an experiment and started feeling like a repeatable methodology.</p>
+
+        <h2>What Made the Work Feel Important</h2>
+
+        <p>The most exciting part for me was not just the accuracy numbers. It was the shift in effort. In the discussion section of the paper, we note that on larger designs this methodology can bring down several weeks of planning effort to a couple of hours. That does not remove the engineer from the loop, and it should not. But it changes where the engineer spends time: less on blank-page planning, more on judgment, refinement, and proof strategy.</p>
+
+        <p>The generated plans also came out in a structured form that is easy to review, export, and track. Each checker has an ID, a name, and a concrete description of what needs to be implemented. That makes it much easier to turn the output into real formal work instead of leaving it as a nice-looking AI artifact.</p>
+
+        <h2>Limits, Lessons, and What Comes Next</h2>
+
+        <p>The approach is promising, but it is not magic. We observed some redundant checkers in the generated plans, and on some designs the model still suggested a few simulation-oriented verification ideas that were not useful for formal sign-off. Those are manageable issues, but they matter.</p>
+
+        <p>The next step we highlighted in both the paper and the presentation is <strong>RAG</strong>, or Retrieval-Augmented Generation. Grounding the model in domain-specific verification knowledge, historical bugs, and design context should help improve both precision and relevance without requiring expensive retraining.</p>
+
+        <p>That is the direction I am most excited about now: not replacing the verifier, but giving the verifier a stronger starting point and a better set of questions on day one.</p>
+
+        <hr class="divider">
+
+        <h2>Acknowledgments</h2>
+
+        <p>This work was co-authored with <strong>Anshul Jain</strong> and <strong>Karan Rawat</strong> at Intel. I am grateful to the DVCon India community for the opportunity to present it, and even more grateful that the work resonated strongly enough to earn Best Paper recognition.</p>
+
+        <p><em>If you are exploring GenAI for formal verification, especially around testplanning, property generation, or RAG-assisted flows, I would be happy to connect.</em></p>
+    </article>
+
+    <footer>
+        <p>&copy; 2024 Pradip Prajapati</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG for Formal-Aware Property Generation - Pradip Prajapati</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-mid: #999999;
+            --accent: #1a1a1a;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --black: #ffffff;
+            --white: #0a0a0a;
+            --gray-light: #1a1a1a;
+            --gray-mid: #888888;
+            --accent: #ffffff;
+            --border: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            font-weight: 300;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 5%;
+            z-index: 1000;
+            background: var(--white);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--black);
+            transition: fill 0.3s ease;
+        }
+
+        .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            display: none;
+        }
+
+        header {
+            padding: 3rem 5%;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.5;
+        }
+
+        article {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 5rem 5%;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-mid);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--gray-mid);
+        }
+
+        strong {
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            color: var(--gray-mid);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--border);
+            padding-left: 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--gray-mid);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 3rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-mid);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 5rem;
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 1.5rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            article {
+                padding: 3rem 5%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+            <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </button>
+
+    <header>
+        <a href="../index.html#blog" class="back-link">&larr; Back to portfolio</a>
+    </header>
+
+    <article>
+        <div class="article-meta">September 2025 · 7 min read</div>
+
+        <h1>RAG for Formal-Aware Property Generation</h1>
+
+        <p class="lead">This work was presented at <strong>DVCon India 2025</strong>, <strong>VLSID 2026</strong>, and <strong>DVCon US 2026</strong>. It introduces a RAG-powered GenFV workflow for writing formal testbench code that combines project-specific SVA examples, design documentation, and custom coding guidance to generate better properties than prompt-only LLM usage.</p>
+
+        <p>Large language models are already useful for verification-adjacent work, but anyone who has tried to apply them to real formal-property generation quickly runs into the same wall: the more closed-source, specialized, and micro-architectural the problem becomes, the less reliable generic model knowledge feels.</p>
+
+        <p>That is exactly the gap this work set out to close. Instead of treating formal property generation as a pure prompting problem, we framed it as a <strong>knowledge retrieval plus generation</strong> problem. The resulting workflow became the foundation of our DVCon India 2025 paper and later evolved into the VLSID 2026 talk on context-aware property generation.</p>
+
+        <h2>Why Prompting Alone Plateaus</h2>
+
+        <p>Our previous DVCon India 2024 work showed that prompt engineering can materially improve formal verification testplanning. But property generation is a tougher target. Writing assertions, constraints, covers, and helper logic for closed-source enterprise designs requires knowledge that frontier models simply do not see in public training data.</p>
+
+        <p>That creates a familiar failure mode: simple properties come out looking good, but the moment the design needs deeper context, project norms, or specialized intent, the model begins to hallucinate or over-generalize. Making the prompt longer does not reliably solve that. In many cases it makes the output less stable.</p>
+
+        <blockquote>
+            The central idea behind this work was simple: if the task is knowledge intensive, the model should not guess. It should retrieve the right design and verification context before it writes code.
+        </blockquote>
+
+        <h2>The RAG-Enabled GenFV Framework</h2>
+
+        <p>The architecture presented in the paper uses a retrieval-augmented generation flow around a normal GenFV loop. The inputs are the RTL, testplan, instructions, and other collateral. The output is formal testbench code, including instrumentation logic and SVA, that can then go into bug finding and proof analysis in VC Formal.</p>
+
+        <p>The key difference is that generation no longer relies only on a free-form prompt. Before the LLM produces code, it retrieves relevant material from two knowledge structures:</p>
+
+        <ul>
+            <li><strong>SVA-RAG</strong>: a database of key-value pairs where the key is a high-level intent description and the value is a SystemVerilog property plus any useful auxiliary code.</li>
+            <li><strong>Document-RAG</strong>: project-specific knowledge such as base specifications, coding guidelines, best-known methods, and other design context the model would otherwise be missing.</li>
+        </ul>
+
+        <p>That retrieved context is then augmented into the prompt so the model can generate code grounded in real examples and local rules instead of relying on generic memory.</p>
+
+        <h2>What Goes Into the Database</h2>
+
+        <p>The SVA database examples shown in the decks are intentionally practical: masked signal equality checks, overflow checks, request-grant patterns, helper logic, timestamps, and contributor metadata. The point is not to build a flashy demo dataset. The point is to give the model reusable formal idioms that reflect how the team actually writes properties.</p>
+
+        <p>The document submission adds an important implementation detail here: we populate the RAG with a scraping flow that mines existing formal environments and converts them into structured key-value examples. That reduces the manual burden of curating the knowledge base from scratch.</p>
+
+        <p>The same write-up also describes a governance loop for quality. Engineers can choose to check generated properties back into the RAG, those check-ins go through admin review, and accepted updates become available to the wider team on a nightly basis.</p>
+
+        <h2>Custom Instructions Matter Too</h2>
+
+        <p>Retrieval alone is not enough. The slide deck calls out a second major lever: <strong>custom instruction categories</strong> with the biggest impact on output quality. Those instructions include formatting rules, naming conventions, language restrictions, and variable-declaration preferences.</p>
+
+        <p>Some of the examples are deliberately strict: keep the property definition and its directive on the same line, do not append arbitrary numbers to generated names, do not use strong and weak keywords, and follow project-specific coding choices rather than whatever the model finds convenient. That turns the system from "a model that can write SVA" into "a model that can write SVA the way this project expects it."</p>
+
+        <h2>How We Scored Quality</h2>
+
+        <p>One of the strongest parts of the paper is that it avoids vague quality claims. The submission defines a weighted scoring metric for a complete set of generated assertions:</p>
+
+        <ul>
+            <li><strong>Code Effectiveness</strong> with weight 0.4, measuring whether the intended logic is actually verified</li>
+            <li><strong>Code Correctness</strong> with weight 0.3, checking for false failures or incorrect behavior</li>
+            <li><strong>Code Quality</strong> with weight 0.3, measuring adherence to coding guidelines</li>
+        </ul>
+
+        <p>That gives a final quality score from 0 to 100, which the work then compares against a human-expertise ladder. In the paper's framing, novice engineers land around 50, intermediate engineers around 70, and experts eventually settle near 95.</p>
+
+        <h2>What the Early Results Showed</h2>
+
+        <p>The submission and decks together paint a useful progression. Out of the box, frontier LLMs were landing in roughly the <strong>40 to 50</strong> range. With the RAG infrastructure in place, the system improved toward <strong>intermediate-engineer quality</strong> once it had access to around <strong>300 quality assertions</strong> worth of knowledge and examples.</p>
+
+        <p>The paper also notes that after adding <strong>100+ SVAs</strong> into the RAG database, the generated assertions improved by about <strong>10%</strong> over frontier LLM baselines. The long-term expectation was that a richer database of roughly <strong>500 high-quality SVAs</strong> could push the system toward expert-level quality.</p>
+
+        <p>That trajectory is what made this work feel real to me. It suggested that quality was not capped by prompt cleverness alone; it could keep rising as the team invested in better examples, richer project context, and stronger feedback loops.</p>
+
+        <h2>Practical Details That Make It Useful</h2>
+
+        <p>A few implementation choices from the doc are especially important for real adoption. The flow supports automatic syntax checking of generated properties and can refine them using the compiler error feedback. It also supports a batch mode that consumes an entire testplan and generates multiple properties in one run instead of forcing one-by-one interaction.</p>
+
+        <p>Those details matter because they move the system closer to a real engineering workflow. The goal is not just isolated property suggestions. The goal is an AI-assisted pipeline that helps move from testplan to usable formal testbench collateral with less manual friction.</p>
+
+        <h2>Where This Research Is Headed</h2>
+
+        <p>The conclusion slide is refreshingly honest. RAG clearly helps with knowledge-intensive FPV work, and the framework is already promising. But the system still struggles when designs become very complex and the verification intent becomes harder to infer.</p>
+
+        <p>The future work is exactly where it should be: streamline how the RAG database is enriched and maintained, make the system more capable on harder designs, and keep pushing toward a full AI workflow that spans <strong>spec to testplan to testbench</strong>. That line also nicely connects this paper back to our earlier DVCon 2024 work and forward to the VLSID 2026 framing.</p>
+
+        <hr class="divider">
+
+        <h2>Acknowledgments</h2>
+
+        <p>This work was presented with <strong>Anshul Jain</strong> and <strong>Zaqi Momin</strong>, and the broader story reflects continued exploration of how GenAI can become genuinely useful inside formal verification instead of merely adjacent to it.</p>
+
+        <p><em>If you are experimenting with GenFV, RAG infrastructure, or assertion-generation quality metrics, I would be glad to compare notes.</em></p>
+    </article>
+
+    <footer>
+        <p>&copy; 2025 Pradip Prajapati</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+</body>
+</html>

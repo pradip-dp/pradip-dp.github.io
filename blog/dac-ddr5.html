@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDR5 Power Management at DAC 2024 - Pradip Prajapati</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-mid: #999999;
+            --accent: #1a1a1a;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --black: #ffffff;
+            --white: #0a0a0a;
+            --gray-light: #1a1a1a;
+            --gray-mid: #888888;
+            --accent: #ffffff;
+            --border: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            font-weight: 300;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 5%;
+            z-index: 1000;
+            background: var(--white);
+            border: 1px solid var(--border);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--black);
+            transition: fill 0.3s ease;
+        }
+
+        .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            display: none;
+        }
+
+        header {
+            padding: 3rem 5%;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--black);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 0.5;
+        }
+
+        article {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 5rem 5%;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-mid);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin: 3rem 0 1.5rem;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--gray-mid);
+        }
+
+        strong {
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            color: var(--gray-mid);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--border);
+            padding-left: 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--gray-mid);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 3rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-mid);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 5rem;
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle {
+                top: 1.5rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            article {
+                padding: 3rem 5%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+            <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </button>
+
+    <header>
+        <a href="../index.html#blog" class="back-link">&larr; Back to portfolio</a>
+    </header>
+
+    <article>
+        <div class="article-meta">June 2024 · 7 min read</div>
+
+        <h1>DDR5 Power Management at DAC 2024</h1>
+
+        <p class="lead">At DAC 2024, we presented "Watt's Up with DDR5: Formal Verification Framework for Robust DRAM Power Management" - a practical formal methodology for validating DDR5 low-power flows, refresh behavior, and cross-flow interactions from the memory-controller side.</p>
+
+        <p>DDR5 brings a real step forward in memory performance and efficiency, but it also makes power management much harder to verify well. Low-power entry and exit, refresh, self-refresh, scheduler coordination, timing windows, and cross-flow interactions all have to behave correctly under strict specification rules. Missing one corner case can mean wasted power, lost bandwidth, or, worse, data integrity risk.</p>
+
+        <p>That is why this project focused on building a formal verification framework that could validate these flows exhaustively instead of relying only on directed scenarios. The goal was not just to find bugs, but to create a reusable structure for verifying complex DDR5 power-management behavior in a disciplined way.</p>
+
+        <h2>Why DDR5 Power Management Is So Tricky</h2>
+
+        <p>The core challenge is that power-management flows do not live in isolation. DDR5 has strict prerequisites before entering low-power states, tight timing requirements around refresh and power-down operations, and multiple operating modes that interact with normal traffic. From the memory-controller perspective, all of those pieces must line up while still maximizing bandwidth and energy efficiency.</p>
+
+        <p>In the talk, we framed the challenge across a few recurring themes:</p>
+
+        <ul>
+            <li>Power-down and self-refresh flows have strict ordering requirements.</li>
+            <li>Timing relationships between controller events must hold across all valid scenarios.</li>
+            <li>The power-management logic interacts heavily with standard scheduler and command flows.</li>
+            <li>Standard checker patterns alone are not enough when the same intent spans multiple states and flows.</li>
+        </ul>
+
+        <blockquote>
+            The verification strategy centered on an FSM-based reference model plus SVA, with the aim of avoiding design bias, reducing state complexity, and making properties simpler to write and debug.
+        </blockquote>
+
+        <h2>The Verification Strategy</h2>
+
+        <p>The foundation of the framework was a set of <strong>FSM-based reference models</strong> derived from the sequence of events defined by the memory-controller behavior and the DDR5 specification. Those models tracked tasks through externally visible outputs and mapped completed events to abstract states.</p>
+
+        <p>That gave us a much cleaner way to express properties. Instead of mirroring the DUT too closely and accidentally inheriting its assumptions, the reference models captured the intended flow at a higher level. This helped reduce design bias and made the resulting SVA checks easier to reason about.</p>
+
+        <p>The presentation highlights a refresh-flow model as an example: drain queues, close pages, issue refresh, wait out the required timing, then reopen the system to new work only when the sequence is complete. Once you can track that flow abstractly, the assertions become much more targeted.</p>
+
+        <h2>Four Checker Families That Mattered</h2>
+
+        <h3>1. Handshake Checkers</h3>
+        <p>Power-management logic communicates with surrounding blocks through request/acknowledge protocols. We used handshake properties to enforce basic but critical rules, such as a request not dropping before acknowledgment and an acknowledgment never appearing without a corresponding request.</p>
+
+        <p>One example bug from the talk came from a refresh drain request being dropped too early. An acknowledgment from a previous transaction leaked into the next one, and the DUT treated it as if the new request had already been serviced. That kind of issue is exactly the sort of protocol corruption formal is excellent at exposing.</p>
+
+        <h3>2. Timing Checkers</h3>
+        <p>DDR5 contains many spec-defined timing windows between events. These checks enforced rules like "event B must not occur if event A happened within the last N cycles," where N comes from configuration or the spec itself.</p>
+
+        <p>The deck gives a concrete example around Power Down Entry. In one failing path, the DUT issued PDE on the command bus before the scheduler had been blocked for the required number of cycles. One FSM path implemented the timing rule correctly while another silently skipped it.</p>
+
+        <h3>3. False Trigger Checkers</h3>
+        <p>These properties guard against flows triggering without the required prerequisite event. In tightly controlled FSM-style behavior, that matters just as much as checking that a legal event eventually happens.</p>
+
+        <p>The self-refresh example from the talk is a good illustration: if there is no pending power-state request, the DUT should not issue Self Refresh Entry. A stale internal flag caused one flow to trigger twice even though the request was asserted only once.</p>
+
+        <h3>4. Prompt Trigger Checkers</h3>
+        <p>This checker family looked at the opposite failure mode: the DUT should not get stuck once the prerequisites to move forward are satisfied. These checks were described in the deck as orthogonal to false-trigger properties, and together they became central to exhaustive flow verification.</p>
+
+        <p>The throttling example made that concrete. When the DIMM indicated throttling, the controller should have entered the PDE flow. In one state, the DUT incorrectly waited for unrelated events to complete and never made forward progress even though the real prerequisites had already been met.</p>
+
+        <h2>Project Scale and Results</h2>
+
+        <p>The final results slide makes it clear this was not a toy exercise. The project generated:</p>
+
+        <ul>
+            <li>3 FSM reference models spanning 46 total FSM states</li>
+            <li>300 assertions</li>
+            <li>311 constraints</li>
+            <li>611 functional covers</li>
+        </ul>
+
+        <p>The effort was carried out by one dedicated engineer at 50% bandwidth over 54 work weeks, for roughly <strong>1,100 engineering hours</strong>. The deck also reports an average of <strong>around 25 hours per bug</strong>, which is a strong signal that the framework was consistently paying off rather than producing isolated wins.</p>
+
+        <p>Just as important, the summary slide ties the work back to product impact: successful formal verification of DDR5 power management, a detailed reusable framework for validating those flows, encouraging bug-finding results, and improved controller accuracy and efficiency.</p>
+
+        <h2>What I Took Away From the Work</h2>
+
+        <p>The biggest lesson for me was that formal becomes much more scalable when the verification architecture is as intentional as the properties themselves. The FSM reference models were not just a convenience. They were the organizing idea that let the rest of the checker strategy stay readable, reusable, and less vulnerable to design bias.</p>
+
+        <p>The second lesson was that cross-flow consistency deserves first-class treatment. Some of the bugs we called out were not classic one-state failures. They came from the same intent being implemented differently in different operating modes or controller states. That is exactly where a carefully structured formal approach can outperform ad hoc checking.</p>
+
+        <p>This project reinforced my belief that formal verification is most valuable when it is used early, structurally, and with enough abstraction to make complex behavior understandable instead of merely provable.</p>
+
+        <hr class="divider">
+
+        <h2>Acknowledgments</h2>
+
+        <p>This work was presented with <strong>Anshul Jain</strong>, <strong>Rocco Salvia</strong>, <strong>Mounica Kothi</strong>, and <strong>Erin Rasmussen</strong>. I am grateful to the DAC 2024 audience for the opportunity to share it and to the broader team that helped turn the framework into a production-strength verification effort.</p>
+
+        <p><em>If you are working on DDR, low-power controller logic, or cross-flow formal strategies, I would be glad to compare notes.</em></p>
+    </article>
+
+    <footer>
+        <p>&copy; 2024 Pradip Prajapati</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+</body>
+</html>
